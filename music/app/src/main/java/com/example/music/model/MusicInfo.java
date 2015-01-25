@@ -1,4 +1,4 @@
-package com.example.music.Activity;
+package com.example.music.model;
 
 /**
  * Created by Lijinpu on 2015/1/22.

@@ -7,46 +7,45 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.music.model.MusicInfo;
 import com.example.music.R;
+import com.example.music.model.Charts;
+import com.example.music.model.MusicInfo;
 
 import java.util.List;
 
 /**
- * Created by Lijinpu on 2015/1/22.
+ * Created by xiaozhisong on 15-1-23.
  */
-public class MusicAdapter extends ArrayAdapter<MusicInfo>{
-
-    private int resourceId;        //关联的配置文件id
-    private Context context;       //父活动
-    public MusicAdapter(Context context,int textViewResourceId,List<MusicInfo> object){
-        super(context,textViewResourceId,object);
+public class ChartsAdapter extends ArrayAdapter<Charts> {
+    private int resourceId;
+    private Context context;
+    public ChartsAdapter(Context context,int textViewResourceId,List<Charts> object) {
+        super(context, textViewResourceId, object);
         resourceId = textViewResourceId;
         this.context = context;
     }
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        MusicInfo musicInfo = getItem(position);
+        Charts charts = getItem(position);
         View view;
         ViewHolder viewHolder;
         if(convertView == null){
             view = LayoutInflater.from(context).inflate(resourceId, null);
             viewHolder = new ViewHolder();
-            viewHolder.musicName = (TextView)view.findViewById(R.id.internet_music_name);
-            viewHolder.musicBaseInfo = (TextView)view.findViewById(R.id.internet_music_baseinfo);
+            viewHolder.name = (TextView)view.findViewById(R.id.internet_charts_name);
+            viewHolder.count = (TextView)view.findViewById(R.id.internet_charts_count);
             view.setTag(viewHolder);
         }else{
             view = convertView;
             viewHolder = (ViewHolder)view.getTag();
         }
-        viewHolder.musicName.setText(musicInfo.getMusicName());
-        viewHolder.musicBaseInfo.setText(musicInfo.getMusicAuthor() + musicInfo.getMusicOtherInfo());
+        viewHolder.name.setText(charts.getName());
+        viewHolder.count.setText(charts.getCount()+"");
         return view;
     }
 
     class ViewHolder{
-        TextView musicName;
-        TextView musicBaseInfo;
+        TextView name;
+        TextView count;
     }
 }
