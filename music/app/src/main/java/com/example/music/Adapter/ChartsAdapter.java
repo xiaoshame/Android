@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.example.music.R;
 import com.example.music.model.Charts;
-import com.example.music.model.MusicInfo;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ import java.util.List;
 public class ChartsAdapter extends ArrayAdapter<Charts> {
     private int resourceId;
     private Context context;
-    public ChartsAdapter(Context context,int textViewResourceId,List<Charts> object) {
+    public ChartsAdapter(Context context, int textViewResourceId, List<Charts> object) {
         super(context, textViewResourceId, object);
         resourceId = textViewResourceId;
         this.context = context;
@@ -40,7 +39,7 @@ public class ChartsAdapter extends ArrayAdapter<Charts> {
             viewHolder = (ViewHolder)view.getTag();
         }
         viewHolder.name.setText(charts.getName());
-        viewHolder.count.setText(charts.getCount()+"");
+        viewHolder.count.setText(charts.getCount()+"首");
         return view;
     }
 

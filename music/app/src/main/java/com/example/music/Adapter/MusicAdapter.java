@@ -19,6 +19,7 @@ public class MusicAdapter extends ArrayAdapter<MusicInfo>{
 
     private int resourceId;        //关联的配置文件id
     private Context context;       //父活动
+
     public MusicAdapter(Context context,int textViewResourceId,List<MusicInfo> object){
         super(context,textViewResourceId,object);
         resourceId = textViewResourceId;

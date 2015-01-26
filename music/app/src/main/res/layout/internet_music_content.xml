@@ -2,24 +2,30 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/internet_music_name"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:textSize="20sp"
-        android:textColor="#000000"
-        android:hint="show music name"
-        android:lines="1" />
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/internet_music_name"
+            android:textSize="20sp"
+            android:textColor="#000000"
+            android:hint="show music name"
+            android:lines="1" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/internet_music_baseinfo"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:hint="show music Base info"
-        android:textSize="20sp"
-        android:textColor="#000000" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/internet_music_baseinfo"
+            android:layout_toRightOf="@id/internet_music_name"
+            android:hint="show music Base info"
+            android:textSize="15sp"
+            android:textColor="#000000" />
+    </LinearLayout>
+    <!--添加下载-->
+    <!--添加开始-->
+    <!--添加暂停-->
+    <!--添加停止-->
 </RelativeLayout>

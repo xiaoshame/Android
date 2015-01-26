@@ -4,14 +4,18 @@ import android.util.Log;
 
 import com.example.music.db.MusicDB;
 import com.example.music.model.Charts;
+import com.example.music.model.MusicInfo;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
+import java.util.ListIterator;
 
 
 import javax.xml.parsers.SAXParserFactory;
@@ -34,15 +38,11 @@ public class Utility {
                     switch(eventType){
                         case XmlPullParser.START_TAG:{
                             if("id".equals(nodeName)){
-                                String id = xmlPullParser.nextText();
-                                Log.d("handleChartsResponseWithPull",id);
-                                charts.setId(Integer.parseInt(id));
+                                charts.setId(xmlPullParser.nextText());
                             }else if("name".equals(nodeName)){
                                 charts.setName(xmlPullParser.nextText());
                             }else if("tcount".equals(nodeName)){
-                                String count = xmlPullParser.nextText();
-                                Log.d("handleChartsResponseWithPull",count);
-                                charts.setCount(Integer.parseInt(count));
+                                charts.setCount(xmlPullParser.nextText());
                             }else if("isnew".equals(nodeName)){
                                 //这个节点暂时不处理
                             }
@@ -68,13 +68,32 @@ public class Utility {
         return false;
     }
 
+    //解析查询排行榜列表的数据
     public synchronized static boolean handleChartsResponseWithSAX(MusicDB musicDB,InputStream response) {
         try{
             SAXParserFactory factory = SAXParserFactory.newInstance();
             XMLReader xmlReader = factory.newSAXParser().getXMLReader();
-            SAXHandler xmlhandler = new SAXHandler(musicDB);
-            xmlReader.setContentHandler(xmlhandler);
+            ChartsSaxHandler xmlHandler = new ChartsSaxHandler(musicDB);
+            xmlReader.setContentHandler(xmlHandler);
             //开始执行解析
+            xmlReader.parse(new InputSource(new InputStreamReader(response,"gb2312")));
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    //解析查询歌曲列表的数据
+    public synchronized static boolean handlerMusicResponseWithSAX(List<MusicInfo> musicInfoList,InputStream response){
+        try{
+            Log.d("handlerMusicResponseWithSAX","Begin Parse Music List Info");
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            XMLReader xmlReader = factory.newSAXParser().getXMLReader();
+            MusicSaxHandler xmlHandler = new MusicSaxHandler(musicInfoList);
+            xmlReader.setContentHandler(xmlHandler);
+
+            //开始解析
             xmlReader.parse(new InputSource(new InputStreamReader(response,"gb2312")));
             return true;
         }catch (Exception e){

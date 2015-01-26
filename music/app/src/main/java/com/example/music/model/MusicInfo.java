@@ -7,6 +7,8 @@ public class MusicInfo {
     private String musicName;
     private String musicAuthor;
     private String musicOtherInfo;
+    private String musicId;
+
     private int musicSize;
     private int musicTime;
     private int musicPlayTime;
@@ -57,5 +59,13 @@ public class MusicInfo {
 
     public void setMusicOtherInfo(String musicOtherInfo) {
         this.musicOtherInfo = musicOtherInfo;
+    }
+
+    public String getMusicId() {
+        return musicId;
+    }
+
+    public void setMusicId(String musicId) {
+        this.musicId = musicId;
     }
 }

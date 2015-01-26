@@ -13,8 +13,8 @@ public class MusicOpenHelper extends SQLiteOpenHelper{
     public static final String CREATE_CHARTS = "create table Charts ("
 //            + "id integer primary key autoincrement, "
             + "charts_name text, "
-            + "charts_id integer, "
-            + "music_num integer)";
+            + "charts_id text, "
+            + "music_num text)";
     //本地音乐表
 
     public MusicOpenHelper(Context context,String name,CursorFactory factory,int version){

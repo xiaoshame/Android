@@ -1,26 +1,28 @@
 package com.example.music.model;
 
+import java.io.Serializable;
+
 /**
  * Created by xiaozhisong on 15-1-23.
  */
-public class Charts {
-    private int id;
-    private int count;
+public class Charts implements Serializable{
+    private String id;
+    private String count;
     private String name;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getCount() {
+    public String getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(String count) {
         this.count = count;
     }
 

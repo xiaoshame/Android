@@ -55,8 +55,8 @@ public class MusicDB {
             do {
                 Charts charts = new Charts();
                 charts.setName(cursor.getString(cursor.getColumnIndex("charts_name")));
-                charts.setCount(cursor.getInt(cursor.getColumnIndex("music_num")));
-                charts.setId(cursor.getInt(cursor.getColumnIndex("charts_id")));
+                charts.setCount(cursor.getString(cursor.getColumnIndex("music_num")));
+                charts.setId(cursor.getString(cursor.getColumnIndex("charts_id")));
                 list.add(charts);
             }while(cursor.moveToNext());
         }
