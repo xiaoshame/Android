@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--layout_marginTop=-50dp是为了是播放等功能固定在屏幕底部-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:background="@drawable/maintab_bar_bg"
+    android:layout_marginTop="-65dp"
+    android:gravity="center">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/music_play_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="3dp"
+                android:text="00:00"
+                android:textColor="#ffffff"
+                android:textSize="10sp" />
+
+            <SeekBar
+                android:id="@+id/music_play_seekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:thumb="@drawable/player_settings_bright_thumb"
+                android:layout_gravity="center_vertical"
+                android:layout_toLeftOf="@+id/music_all_time"
+                android:layout_toRightOf="@+id/music_play_time"/>
+
+            <TextView
+                android:id="@+id/music_all_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="3dp"
+                android:text="00:00"
+                android:textColor="#ffffff"
+                android:textSize="10sp" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.example.music.AlwaysMarqueeTextView
+                android:id="@+id/music_base_info"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:textColor="#ffffff"
+                android:scrollHorizontally="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit ="marquee_forever"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"/>
+            <Button
+                android:id="@+id/music_control_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/player_play_highlight" />
+            <Button
+                android:id="@+id/music_progress_previous"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/music_control_play"
+                android:background="@drawable/player_prev_highlight" />
+
+            <Button
+                android:id="@+id/music_progress_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/music_control_play"
+                android:background="@drawable/player_next_highlight" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

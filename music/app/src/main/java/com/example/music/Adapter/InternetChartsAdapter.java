@@ -1,4 +1,4 @@
-package com.example.music.Adapter;
+package com.example.music.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,10 +15,10 @@ import java.util.List;
 /**
  * Created by xiaozhisong on 15-1-23.
  */
-public class ChartsAdapter extends ArrayAdapter<Charts> {
+public class InternetChartsAdapter extends ArrayAdapter<Charts> {
     private int resourceId;
     private Context context;
-    public ChartsAdapter(Context context, int textViewResourceId, List<Charts> object) {
+    public InternetChartsAdapter(Context context, int textViewResourceId, List<Charts> object) {
         super(context, textViewResourceId, object);
         resourceId = textViewResourceId;
         this.context = context;

@@ -10,12 +10,21 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class MusicOpenHelper extends SQLiteOpenHelper{
     //排行榜建表
-    public static final String CREATE_CHARTS = "create table Charts ("
+    private static final String CREATE_CHARTS = "create table Charts ("
 //            + "id integer primary key autoincrement, "
             + "charts_name text, "
             + "charts_id text, "
             + "music_num text)";
-    //本地音乐表
+
+    //歌曲下载信息
+    private static final String CRAEATE_DOWNINFO = "create table downloadInfo ("
+            + "musicName text, "
+            + "musicAuthor text, "
+            + "downloadUrl text, "
+            + "path text, "
+            + "downloadedBytes integer, "
+            + "totalBytes integer, "
+            + "downloadStatus text)";
 
     public MusicOpenHelper(Context context,String name,CursorFactory factory,int version){
         super(context,name,factory,version);
@@ -23,6 +32,7 @@ public class MusicOpenHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_CHARTS);     //创建排行榜表单
+        db.execSQL(CRAEATE_DOWNINFO);   //创建下载信息表单
     }
 
     @Override

@@ -6,7 +6,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,10 +51,16 @@ public class MusicSaxHandler extends DefaultHandler {
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
         super.characters(ch, start, length);
+
         if("id".equals(nodeName)){
             musicInfo.setMusicId(new String(ch,start,length));
         }else if("name".equals(nodeName)){
-            musicInfo.setMusicName(new String(ch,start,length));
+            String values = new String(ch,start,length);
+            int index = values.indexOf("$");
+            musicInfo.setMusicName(values.substring(0,index));
+            String music_author = values.substring(index + 2);
+            index = music_author.indexOf("$");
+            musicInfo.setMusicAuthor(music_author.substring(0,index));
         }
     }
 }

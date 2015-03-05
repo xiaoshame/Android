@@ -9,7 +9,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/internet_music_name"
+            android:id="@+id/local_music_name"
             android:textSize="20sp"
             android:textColor="#000000"
             android:lines="1"
@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/internet_music_baseinfo"
+            android:id="@+id/local_music_baseinfo"
             android:textSize="15sp"
             android:textColor="#000000"
             android:paddingLeft="5dp"/>
@@ -26,9 +26,9 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/internet_audio_down"
+        android:id="@+id/loacl_audio_delete"
         android:layout_alignParentRight="true"
-        android:text="下载"
+        android:text="删除"
         android:textSize="20sp"
         android:layout_centerVertical="true"
         android:focusable="false"/>

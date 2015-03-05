@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.music.db.MusicDB;
 import com.example.music.model.Charts;
+import com.example.music.model.MusicAddress;
 import com.example.music.model.MusicInfo;
 
 import org.xml.sax.InputSource;
@@ -11,19 +12,16 @@ import org.xml.sax.XMLReader;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.util.List;
-import java.util.ListIterator;
-
 
 import javax.xml.parsers.SAXParserFactory;
 
 /**
  * Created by xiaozhisong on 15-1-23.
  */
-public class Utility {
+public class XmlUtility {
     //解析和处理服务器返回的排行榜数据
     public synchronized static boolean handleChartsResponseWithPull(MusicDB musicDB,InputStream response){
         if(response != null){
@@ -69,14 +67,14 @@ public class Utility {
     }
 
     //解析查询排行榜列表的数据
-    public synchronized static boolean handleChartsResponseWithSAX(MusicDB musicDB,InputStream response) {
+    public synchronized static boolean handleChartsResponseWithSAX(MusicDB musicDB,String response) {
         try{
             SAXParserFactory factory = SAXParserFactory.newInstance();
             XMLReader xmlReader = factory.newSAXParser().getXMLReader();
             ChartsSaxHandler xmlHandler = new ChartsSaxHandler(musicDB);
             xmlReader.setContentHandler(xmlHandler);
             //开始执行解析
-            xmlReader.parse(new InputSource(new InputStreamReader(response,"gb2312")));
+            xmlReader.parse(new InputSource(new StringReader(response)));
             return true;
         }catch (Exception e){
             e.printStackTrace();
@@ -85,7 +83,7 @@ public class Utility {
     }
 
     //解析查询歌曲列表的数据
-    public synchronized static boolean handlerMusicResponseWithSAX(List<MusicInfo> musicInfoList,InputStream response){
+    public synchronized static boolean handlerMusicResponseWithSAX(List<MusicInfo> musicInfoList,String response){
         try{
             Log.d("handlerMusicResponseWithSAX","Begin Parse Music List Info");
             SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -94,7 +92,23 @@ public class Utility {
             xmlReader.setContentHandler(xmlHandler);
 
             //开始解析
-            xmlReader.parse(new InputSource(new InputStreamReader(response,"gb2312")));
+            xmlReader.parse(new InputSource(new StringReader(response)));
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    //解析歌曲地址的xml
+    public synchronized static boolean handleMusicAddressWithSAX(MusicAddress musicAddress,String response){
+        try{
+            Log.d("handleMusicAddressWithSAX","Begin Parse Music Address");
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            XMLReader xmlReader = factory.newSAXParser().getXMLReader();
+            AddressSaxHandler addressSaxHandler = new AddressSaxHandler(musicAddress);
+            xmlReader.setContentHandler(addressSaxHandler);
+            xmlReader.parse(new InputSource(new StringReader(response)));
             return true;
         }catch (Exception e){
             e.printStackTrace();

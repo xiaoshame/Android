@@ -6,9 +6,9 @@ import java.io.Serializable;
  * Created by xiaozhisong on 15-1-23.
  */
 public class Charts implements Serializable{
-    private String id;
-    private String count;
-    private String name;
+    private String id = "";
+    private String count = "";
+    private String name = "";
 
     public String getId() {
         return id;
