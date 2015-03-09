@@ -30,6 +30,8 @@ public class MainActivity extends Activity{
             //没有权限，获取权限
             startAddDeviceAdminAty();
         }
+        //放在最后，这样锁屏的时候不会闪一下
+        setContentView(R.layout.activity_main);
     }
 
     //获取权限
