@@ -1,7 +1,12 @@
 package com.example.appexplorer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -9,15 +14,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ShowAppActivity extends Activity implements View.OnClickListener,Runnable{
+public class ShowAppActivity extends Activity implements View.OnClickListener,Runnable,AdapterView.OnItemClickListener{
     //GridView
     private GridView gridView;
     private ListView listView;
@@ -91,6 +98,10 @@ public class ShowAppActivity extends Activity implements View.OnClickListener,Ru
         ib_change_category.setOnClickListener(this);
         ib_change_view = (ImageButton)findViewById(R.id.ib_change_view);
         ib_change_view.setOnClickListener(this);
+
+        //设置列表点击响应
+        gridView.setOnItemClickListener(this);
+        listView.setOnItemClickListener(this);
         scanPackageInfo();
     }
 
@@ -142,7 +153,7 @@ public class ShowAppActivity extends Activity implements View.OnClickListener,Ru
     @Override
     public void run() {
         //获取所有应用程序信息
-        allPackageInfos = getPackageManager().getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
+        allPackageInfos = getPackageManager().getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES | PackageManager.GET_ACTIVITIES);
         userPackageInfos = new ArrayList<PackageInfo>();
         //扫描用户安装的应用程序信息
         for(int i = 0;i < allPackageInfos.size();i++){
@@ -155,5 +166,50 @@ public class ShowAppActivity extends Activity implements View.OnClickListener,Ru
             }
         }
         handler.sendEmptyMessage(SEARCH_USERAPP);
+    }
+
+    //点击list item
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+        //弹出一个对话框
+        //创建Dialog的构造器
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("选项");
+        builder.setItems(R.array.choice,new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                PackageInfo packageInfo = null;
+                if(false == isAllApplication){
+                    packageInfo = userPackageInfos.get(position);
+                }else {
+                    packageInfo = allPackageInfos.get(position);
+                }
+                switch (which){
+                    case 0:
+                        //第一项启动对应程序
+                        //获取包名
+                        String packageName = packageInfo.packageName;
+                        //获取报名
+                        ActivityInfo activityInfo =  packageInfo.activities[0];
+                        if(activityInfo == null){
+                            Toast.makeText(ShowAppActivity.this,"没有可用Activity",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        Intent intent = new Intent();
+                        intent.setComponent(new ComponentName(packageName,activityInfo.name));
+                        startActivity(intent);
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        builder.setNegativeButton("取消",null);
+        builder.show();
     }
 }

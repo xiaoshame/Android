@@ -4,5 +4,10 @@
     <string name="app_name">AppExplorer</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
+    
+    <array name="choice">
+        <item name="start">启动程序</item>
+        <item name="detail">详细信息</item>
+        <item name="uninstall">卸载程序</item>
+    </array>
 </resources>
