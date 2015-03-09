@@ -9,11 +9,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.Toast;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,16 +20,20 @@ import java.util.List;
 public class ShowAppActivity extends Activity implements View.OnClickListener,Runnable{
     //GridView
     private GridView gridView;
-    //GridView 适配器
-    private GridViewAdapter gridViewAdapter;
+    private ListView listView;
     //用户app信息列表
     private List<PackageInfo> userPackageInfos;
     //所有应用程序列表
     private List<PackageInfo> allPackageInfos;
     //app种类按钮
     private ImageButton ib_change_category;
+    //list显示样式按钮
+    private ImageButton ib_change_view;
+
     //显示app种类的标记(默认只显示所有的app)
-    private boolean allApplication = true;
+    private boolean isAllApplication = false;
+    //app默认显示的样式,默认为GridView样式
+    private boolean isListViewStyle = false;
 
     //进度对话框
     private ProgressDialog progressDialog;
@@ -47,13 +49,29 @@ public class ShowAppActivity extends Activity implements View.OnClickListener,Ru
             //默认显示所有应用程序
             if(msg.what == SEARCH_USERAPP){
                 progressDialog.dismiss();
-                allApplication = false;
-                setProgressBarIndeterminateVisibility(false);
-                gridViewAdapter.notifyDataSetChanged();
-            }
+                if(false == isAllApplication){
+                    //改变为显示用户安装app和用户升级的系统app
+                    //设置适配器
+                    if(isListViewStyle){
+                        listView.setAdapter(new ListViewAdapter(ShowAppActivity.this,userPackageInfos));
+                    }else{
+                        gridView.setAdapter(new GridViewAdapter(ShowAppActivity.this,userPackageInfos));
+                    }
+                    //修改对应的图标
+                    ib_change_category.setImageResource(R.drawable.user);
+                }else {
+                    //改变为显示系统app
+                    //设置适配器
+                    //设置适配器
+                    if(isListViewStyle){
+                        listView.setAdapter(new ListViewAdapter(ShowAppActivity.this,allPackageInfos));
+                    }else{
+                        gridView.setAdapter(new GridViewAdapter(ShowAppActivity.this,allPackageInfos));
+                    }
+                    //修改对应的图标
+                    ib_change_category.setImageResource(R.drawable.all);
+                }
 
-            if(msg.what == DELETE_APP){
-                System.out.println("Delete App Success!");
             }
         }
     };
@@ -62,20 +80,17 @@ public class ShowAppActivity extends Activity implements View.OnClickListener,Ru
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //全屏
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.show_app_grid);
         //设置进度信息
-        setProgressBarIndeterminateVisibility(true);
+        //setProgressBarIndeterminateVisibility(true);
         gridView = (GridView)findViewById(R.id.gv_apps);
-        //设置适配器
-        userPackageInfos = new ArrayList<PackageInfo>();
-        gridViewAdapter = new GridViewAdapter(ShowAppActivity.this,userPackageInfos);
-        gridView.setAdapter(gridViewAdapter);
+        listView = (ListView)findViewById(R.id.lv_apps);
         ib_change_category = (ImageButton)findViewById(R.id.ib_change_category);
         ib_change_category.setOnClickListener(this);
-
+        ib_change_view = (ImageButton)findViewById(R.id.ib_change_view);
+        ib_change_view.setOnClickListener(this);
         scanPackageInfo();
     }
 
@@ -83,20 +98,35 @@ public class ShowAppActivity extends Activity implements View.OnClickListener,Ru
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.ib_change_category:
-                //获取所有应用程序信息
-                allPackageInfos = getPackageManager().getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
-                if(true == allApplication){
-                    //显示用户安装的app
-                    ib_change_category.setImageResource(R.drawable.user);
-                    allApplication = false;
-                    gridView.setAdapter(gridViewAdapter);
-                    scanPackageInfo();
-                }else{
-                    ib_change_category.setImageResource(R.drawable.all);
-                    allApplication = true;
+                //扫描应用程序信息
+                isAllApplication = !isAllApplication;
+                scanPackageInfo();
+                break;
+            case R.id.ib_change_view:
+                if(true == isListViewStyle){
+                    //隐藏listView
+                    listView.setVisibility(View.GONE);
+                    //以GridView样式显示
+                    gridView.setVisibility(View.VISIBLE);
                     //设置适配器
-                    gridView.setAdapter(new GridViewAdapter(ShowAppActivity.this,allPackageInfos));
+                    if(true == isAllApplication){
+                        gridView.setAdapter(new GridViewAdapter(ShowAppActivity.this,allPackageInfos));
+                    }else{
+                        gridView.setAdapter(new GridViewAdapter(ShowAppActivity.this,userPackageInfos));
+                    }
+                }else{
+                    //隐藏GridView
+                    gridView.setVisibility(View.GONE);
+                    //以listView样式显示
+                    listView.setVisibility(View.VISIBLE);
+                    //设置适配器
+                    if(true == isAllApplication){
+                        listView.setAdapter(new ListViewAdapter(ShowAppActivity.this,allPackageInfos));
+                    }else{
+                        listView.setAdapter(new ListViewAdapter(ShowAppActivity.this,userPackageInfos));
+                    }
                 }
+                isListViewStyle = !isListViewStyle;
                 break;
             default:
                 break;
@@ -113,29 +143,17 @@ public class ShowAppActivity extends Activity implements View.OnClickListener,Ru
     public void run() {
         //获取所有应用程序信息
         allPackageInfos = getPackageManager().getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
-        userPackageInfos.clear();
+        userPackageInfos = new ArrayList<PackageInfo>();
         //扫描用户安装的应用程序信息
         for(int i = 0;i < allPackageInfos.size();i++){
             PackageInfo temp = allPackageInfos.get(i);
             ApplicationInfo applicationInfo = temp.applicationInfo;
-            if((applicationInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0){
-                //system app
-            }else if((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0){
-                //Non-system app
+            if(0 != (applicationInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) ||
+                    0 == (applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM)){
+                //被用户升级过的系统app和用户安装的app
                 userPackageInfos.add(temp);
             }
         }
-//        try{
-//            Thread.currentThread().sleep(2000);
-//        }catch (InterruptedException e){
-//            e.printStackTrace();
-//        }
         handler.sendEmptyMessage(SEARCH_USERAPP);
-//        try{
-//            Thread.currentThread().sleep(5000);
-//            handler.sendEmptyMessage(DELETE_APP);
-//        }catch (InterruptedException e){
-//            e.printStackTrace();
-//        }
     }
 }
