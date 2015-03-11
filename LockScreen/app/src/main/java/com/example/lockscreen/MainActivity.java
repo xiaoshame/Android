@@ -32,6 +32,8 @@ public class MainActivity extends Activity{
         }
         //放在最后，这样锁屏的时候不会闪一下
         setContentView(R.layout.activity_main);
+        //锁屏之后就立即kill掉我们的Activity，避免资源的浪费;
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
     //获取权限
