@@ -10,6 +10,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -47,7 +48,7 @@ public class ShowAppActivity extends Activity implements View.OnClickListener,Ru
 
     //消息类型
     private static final int SEARCH_USERAPP = 0;
-    private static final int DELETE_APP = 1;
+    private static final int REQUEST_CODE_UNINSTALL = 10001;
     //Handler
     private Handler handler = new Handler(){
         @Override
@@ -68,7 +69,6 @@ public class ShowAppActivity extends Activity implements View.OnClickListener,Ru
                     ib_change_category.setImageResource(R.drawable.user);
                 }else {
                     //改变为显示系统app
-                    //设置适配器
                     //设置适配器
                     if(isListViewStyle){
                         listView.setAdapter(new ListViewAdapter(ShowAppActivity.this,allPackageInfos));
@@ -201,8 +201,14 @@ public class ShowAppActivity extends Activity implements View.OnClickListener,Ru
                         startActivity(intent);
                         break;
                     case 1:
+                        //详细信息
+                        showAppDetail(packageInfo);
                         break;
                     case 2:
+                        //卸载
+                        Uri uri = Uri.parse("package:" + packageInfo.packageName);
+                        Intent uninstallIntent = new Intent(Intent.ACTION_DELETE,uri);
+                        startActivityForResult(uninstallIntent, REQUEST_CODE_UNINSTALL);
                         break;
                     default:
                         break;
@@ -211,5 +217,28 @@ public class ShowAppActivity extends Activity implements View.OnClickListener,Ru
         });
         builder.setNegativeButton("取消",null);
         builder.show();
+    }
+    //显示详细信息
+    private void showAppDetail(PackageInfo packageInfo){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("详细信息");
+        StringBuilder stringBuilder = new StringBuilder("程序名: " + packageInfo.applicationInfo.loadLabel(getPackageManager()));
+        stringBuilder.append("\n包名: " + packageInfo.packageName);
+        stringBuilder.append("\n版本号 : " + packageInfo.versionCode);
+        stringBuilder.append("\n版本名: " + packageInfo.versionName);
+        builder.setMessage(stringBuilder.toString());
+        builder.setIcon(packageInfo.applicationInfo.loadIcon(getPackageManager()));
+        builder.setPositiveButton("确定",null);
+        //两种方式都可以显示对话框
+        builder.create().show();
+    }
+
+    //卸载操作的返回
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_CODE_UNINSTALL) {
+            scanPackageInfo();
+        }
     }
 }
