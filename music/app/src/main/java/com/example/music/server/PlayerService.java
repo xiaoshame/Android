@@ -289,6 +289,7 @@ public class PlayerService extends Service{
         notificationManager.notify(1,notification);
     }
 
+    //通过内容提供器获取指定的歌曲的albumId，如果歌曲的信息不再内容提供器中，此方法将失效
     private void showMusicAlbumPicture(){
         String musicPath = null;
         Cursor cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,null,null,null,
@@ -303,18 +304,19 @@ public class PlayerService extends Service{
                 }
             }while(cursor.moveToNext());
         }
-        //获取歌曲专辑id
-        int albumId = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
-        //通过albumId查找albumArt
-        Bitmap bitmap = null;
-        String albumArt = getAlbumArt(albumId);
-        if(albumArt == null){
-            contentView.setImageViewResource(R.id.music_album_picture,R.drawable.icon_album_default);
-        }else{
-            bitmap = BitmapFactory.decodeFile(albumArt);
-            contentView.setImageViewBitmap(R.id.music_album_picture,bitmap);
+        if(musicPath != null && musicPath.equals(path)){
+            //获取歌曲专辑id
+            int albumId = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
+            //通过albumId查找albumArt
+            Bitmap bitmap = null;
+            String albumArt = getAlbumArt(albumId);
+            if(albumArt != null){
+                bitmap = BitmapFactory.decodeFile(albumArt);
+                contentView.setImageViewBitmap(R.id.music_album_picture,bitmap);
+                return;
+            }
         }
-
+        contentView.setImageViewResource(R.id.music_album_picture,R.drawable.icon_album_default);
     }
 
     //通过albumId查找albumArt，如果找不到返回null
