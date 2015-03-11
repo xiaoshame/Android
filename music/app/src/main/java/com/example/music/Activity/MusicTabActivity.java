@@ -1,5 +1,6 @@
 package com.example.music.activity;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -134,6 +135,8 @@ public class MusicTabActivity extends FragmentActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //关闭通知栏通知
+        mediaBinder.cancleNotification();
         //注销本地广播接收器
         localBroadcastManager.unregisterReceiver(broadcastReceiver);
         //注销通知栏的广播接收器
@@ -393,11 +396,26 @@ public class MusicTabActivity extends FragmentActivity implements View.OnClickLi
                 mediaBinder.toPrevious();
             }
             if("com.example.music.close".equals(strContrl)){
-                //关闭通知栏通知
-                mediaBinder.cancleNotification();
                 //关闭程序
                 finish();
             }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //如果当前fragment是网络歌曲页面,调用默认，返回网络排行榜页面
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment fragment = fm.findFragmentByTag("internetmusic");
+        if(fragment == null && mediaBinder.isPlay()){
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //如果intent不指定category，那么无论intent filter的内容是什么都应该是匹配的。
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
+        }else {
+            super.onBackPressed();
         }
     }
 }
