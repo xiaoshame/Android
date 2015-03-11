@@ -12,7 +12,7 @@ Android/music/app-release.apk为安装包
 
 通知栏通知使用广播控制音乐的播放
 
-
+还需要添加下载的歌曲更新到多媒体数据库中，更换获取本地歌曲列表的方式(现在的方式为读取下载歌曲数据库中的信息)，更换为从多媒体数据库中获取本地歌曲信息
 
 
 
@@ -23,3 +23,11 @@ Android/LockScreen/app-release.apk 为安装包
 
 第一次运行时激活componentName，后面componentName 就会一直是激活状态
 
+
+
+AppExplorer
+使用app管理器获取app信息，使用GridViewh和ListView两种方式进行展示
+通过包名和活动名，打开指定的应用程序
+卸载应用程序，只能卸载用户安装的app，无法卸载系统app
+对话框的基本用法
+还需要添加卸载系统app和备份系统app功能
