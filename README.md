@@ -26,8 +26,20 @@ Android/LockScreen/app-release.apk 为安装包
 
 
 AppExplorer
+
 使用app管理器获取app信息，使用GridViewh和ListView两种方式进行展示
+
 通过包名和活动名，打开指定的应用程序
+
 卸载应用程序，只能卸载用户安装的app，无法卸载系统app
+
 对话框的基本用法
+
 还需要添加卸载系统app和备份系统app功能
+
+
+Calendar
+
+使用GridView来显示
+
+阴历和阳历之间的关系使用网络上的开源代码
