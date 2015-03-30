@@ -31,7 +31,7 @@ Android/LockScreen/app-release.apk 为安装包
 
 AppExplorer
 
-使用app管理器获取app信息，使用GridViewh和ListView两种方式进行展示
+使用app管理器获取app信息，使用GridView和ListView两种方式进行展示
 
 通过包名和活动名，打开指定的应用程序
 
